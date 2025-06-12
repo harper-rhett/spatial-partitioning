@@ -45,7 +45,7 @@ public class Quadtree
 			}
 			else
 			{
-				Sort(position);
+				OldSort(position);
 			}
 		}
 
@@ -60,13 +60,18 @@ public class Quadtree
 			southEast = new(verticalSplit, horizontalSplit, right, bottom);
 
 			// Divide positions into respective quadrants
-			foreach (Vector2 position in positions) Sort(position);
+			foreach (Vector2 position in positions)
+			{
+				//Node parentNode = Sort(position);
+				//parentNode.AddPosition(position);
+				OldSort(position);
+			}
 
 			// No longer a leaf node
 			isLeafNode = false;
 		}
 
-		private void Sort(Vector2 position)
+		private void OldSort(Vector2 position)
 		{
 			if (northWest.TryAdd(position)) return;
 			else if (northEast.TryAdd(position)) return;
@@ -79,6 +84,15 @@ public class Quadtree
 			bool inBounds = InBounds(position);
 			if (inBounds) AddPosition(position);
 			return inBounds;
+		}
+
+		private Node Sort(Vector2 position)
+		{
+			if (northWest.InBounds(position)) return northWest;
+			else if (northEast.InBounds(position)) return northEast;
+			else if (southWest.InBounds(position)) return southWest;
+			else if (southEast.InBounds(position)) return southEast;
+			else throw new Exception("Position out of bounds.");
 		}
 
 		private bool InBounds(Vector2 position)
@@ -121,5 +135,10 @@ public class Quadtree
 		List<Rectangle> quadrants = new();
 		rootNode.CollectQuadrants(quadrants);
 		return quadrants;
+	}
+
+	public Vector2 GetClosestPoint(Vector2 point)
+	{
+		return Vector2.Zero;
 	}
 }
