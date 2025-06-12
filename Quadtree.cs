@@ -45,7 +45,7 @@ public class Quadtree
 			}
 			else
 			{
-				OldSort(position);
+				SortAndAdd(position);
 			}
 		}
 
@@ -60,30 +60,16 @@ public class Quadtree
 			southEast = new(verticalSplit, horizontalSplit, right, bottom);
 
 			// Divide positions into respective quadrants
-			foreach (Vector2 position in positions)
-			{
-				//Node parentNode = Sort(position);
-				//parentNode.AddPosition(position);
-				OldSort(position);
-			}
+			foreach (Vector2 position in positions) SortAndAdd(position);
 
 			// No longer a leaf node
 			isLeafNode = false;
 		}
 
-		private void OldSort(Vector2 position)
+		private void SortAndAdd(Vector2 position)
 		{
-			if (northWest.TryAdd(position)) return;
-			else if (northEast.TryAdd(position)) return;
-			else if (southWest.TryAdd(position)) return;
-			else if (southEast.TryAdd(position)) return;
-		}
-
-		public bool TryAdd(Vector2 position)
-		{
-			bool inBounds = InBounds(position);
-			if (inBounds) AddPosition(position);
-			return inBounds;
+			Node parentNode = Sort(position);
+			parentNode.AddPosition(position);
 		}
 
 		private Node Sort(Vector2 position)
