@@ -43,10 +43,7 @@ public class Quadtree
 				positions.Add(position);
 				if (positions.Count == 4) Split();
 			}
-			else
-			{
-				SortAndAdd(position);
-			}
+			else SortAndAdd(position);
 		}
 
 		private void Split()
@@ -68,8 +65,8 @@ public class Quadtree
 
 		private void SortAndAdd(Vector2 position)
 		{
-			Node parentNode = Sort(position);
-			parentNode.AddPosition(position);
+			Node node = Sort(position);
+			node.AddPosition(position);
 		}
 
 		private Node Sort(Vector2 position)
@@ -102,6 +99,30 @@ public class Quadtree
 			southWest.CollectQuadrants(quadrants);
 			southEast.CollectQuadrants(quadrants);
 		}
+
+		public Vector2? FindClosestPoint(Vector2 position)
+		{
+			if (isLeafNode)
+			{
+				float closestDistance = float.MaxValue;
+				Vector2? closestPoint = null;
+				foreach (Vector2 point in positions)
+				{
+					float distance = Vector2.Distance(position, point);
+					if (distance < closestDistance)
+					{
+						closestDistance = distance;
+						closestPoint = point;
+					}
+				}
+				return closestPoint;
+			}
+			else
+			{
+				Node node = Sort(position);
+				return node.FindClosestPoint(position);
+			}
+		}
 	}
 
 	private Node rootNode;
@@ -123,7 +144,7 @@ public class Quadtree
 		return quadrants;
 	}
 
-	public Vector2 GetClosestPoint(Vector2 point)
+	public Vector2 FindClosestPoint(Vector2 position)
 	{
 		return Vector2.Zero;
 	}

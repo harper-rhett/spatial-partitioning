@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -27,6 +28,9 @@ internal class QuadtreeTest
 			points.Add(point);
 			quadtree.AddPosition(point);
 		}
+
+		// Need to test distance method
+		Console.WriteLine("Test");
 	}
 
 	public void Draw()
