@@ -14,7 +14,7 @@ internal class QuadtreeTest
 	private Dictionary<Vector2, Vector2> comparisons = new();
 	private Quadtree quadtree;
 
-	public QuadtreeTest(int windowSize, int pointCount, int comparisons)
+	public QuadtreeTest(int windowSize, int pointCount, int comparisonCount)
 	{
 		// Initialize
 		quadtree = new(windowSize);
@@ -31,17 +31,14 @@ internal class QuadtreeTest
 		}
 
 		// Generate random comparisons
-		for (int comparisonIndex = 0; comparisonIndex < comparisons; comparisons++)
+		for (int comparisonIndex = 0; comparisonIndex < comparisonCount; comparisonIndex++)
 		{
 			int x = random.Next(windowSize);
 			int y = random.Next(windowSize);
 			Vector2 comparisonOrigin = new(x, y);
 			Vector2 closestPoint = quadtree.FindClosestPoint(comparisonOrigin).Value;
-			this.comparisons[comparisonOrigin] = closestPoint;
+			comparisons[comparisonOrigin] = closestPoint;
 		}
-
-		// Need to test distance method
-		Console.WriteLine("Test");
 	}
 
 	public void Draw()
