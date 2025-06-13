@@ -100,6 +100,9 @@ public class Quadtree
 			southEast.CollectQuadrants(quadrants);
 		}
 
+		// Big problem here
+		// I am only searching the leaf node that contains the position. I need to search
+		// adjacent leaf nodes.
 		public Vector2? FindClosestPoint(Vector2 position)
 		{
 			if (isLeafNode)
@@ -144,8 +147,8 @@ public class Quadtree
 		return quadrants;
 	}
 
-	public Vector2 FindClosestPoint(Vector2 position)
+	public Vector2? FindClosestPoint(Vector2 position)
 	{
-		return Vector2.Zero;
+		return rootNode.FindClosestPoint(position);
 	}
 }

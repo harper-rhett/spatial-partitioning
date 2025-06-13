@@ -8,7 +8,7 @@ using SpatialPartitioning;
 const int windowSize = 1200;
 
 // Initialize
-QuadtreeTest quadtreeTest = new(windowSize, 500);
+QuadtreeTest quadtreeTest = new(windowSize, 500, 50);
 
 // Game loop
 Raylib.InitWindow(windowSize, windowSize, "Quadtree Test");
