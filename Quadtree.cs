@@ -13,7 +13,7 @@ public class Quadtree
 	private class Node
 	{
 		// Children
-		private bool isLeafNode = true;
+		public bool IsLeafNode { get; private set; } = true;
 		private List<Vector2> positions = new();
 		private Node northWest;
 		private Node northEast;
@@ -38,7 +38,7 @@ public class Quadtree
 
 		public void AddPosition(Vector2 position)
 		{
-			if (isLeafNode)
+			if (IsLeafNode)
 			{
 				positions.Add(position);
 				if (positions.Count == 4) Split();
@@ -60,7 +60,7 @@ public class Quadtree
 			foreach (Vector2 position in positions) SortAndAdd(position);
 
 			// No longer a leaf node
-			isLeafNode = false;
+			IsLeafNode = false;
 		}
 
 		private void SortAndAdd(Vector2 position)
@@ -88,7 +88,7 @@ public class Quadtree
 
 		public void CollectQuadrants(List<Rectangle> quadrants)
 		{
-			if (isLeafNode) quadrants.Add(Quadrant);
+			if (IsLeafNode) quadrants.Add(Quadrant);
 			else CollectChildQuadrants(quadrants);
 		}
 
@@ -105,7 +105,7 @@ public class Quadtree
 		// adjacent leaf nodes.
 		public Vector2? FindClosestPoint(Vector2 position)
 		{
-			if (isLeafNode)
+			if (IsLeafNode)
 			{
 				float closestDistance = float.MaxValue;
 				Vector2? closestPoint = null;
