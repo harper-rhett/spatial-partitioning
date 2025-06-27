@@ -14,7 +14,7 @@ public class Quadtree
 	{
 		// Children
 		public bool IsLeafNode { get; private set; } = true;
-		private List<Vector2> positions = new();
+		private List<Vector2> points = new();
 		private Node northWest;
 		private Node northEast;
 		private Node southWest;
@@ -36,14 +36,14 @@ public class Quadtree
 			this.bottom = bottom;
 		}
 
-		public void AddPosition(Vector2 position)
+		public void AddPoint(Vector2 point)
 		{
 			if (IsLeafNode)
 			{
-				positions.Add(position);
-				if (positions.Count == 4) Split();
+				points.Add(point);
+				if (points.Count == 4) Split();
 			}
-			else SortAndAdd(position);
+			else SortAndAddPoint(point);
 		}
 
 		private void Split()
@@ -57,19 +57,19 @@ public class Quadtree
 			southEast = new(verticalSplit, horizontalSplit, right, bottom);
 
 			// Divide positions into respective quadrants
-			foreach (Vector2 position in positions) SortAndAdd(position);
+			foreach (Vector2 point in points) SortAndAddPoint(point);
 
 			// No longer a leaf node
 			IsLeafNode = false;
 		}
 
-		private void SortAndAdd(Vector2 position)
+		private void SortAndAddPoint(Vector2 point)
 		{
-			Node node = Sort(position);
-			node.AddPosition(position);
+			Node node = SortPosition(point);
+			node.AddPoint(point);
 		}
 
-		private Node Sort(Vector2 position)
+		private Node SortPosition(Vector2 position)
 		{
 			if (northWest.InBounds(position)) return northWest;
 			else if (northEast.InBounds(position)) return northEast;
@@ -99,33 +99,6 @@ public class Quadtree
 			southWest.CollectQuadrants(quadrants);
 			southEast.CollectQuadrants(quadrants);
 		}
-
-		// Big problem here
-		// I am only searching the leaf node that contains the position. I need to search
-		// adjacent leaf nodes.
-		public Vector2? FindClosestPoint(Vector2 position)
-		{
-			if (IsLeafNode)
-			{
-				float closestDistance = float.MaxValue;
-				Vector2? closestPoint = null;
-				foreach (Vector2 point in positions)
-				{
-					float distance = Vector2.Distance(position, point);
-					if (distance < closestDistance)
-					{
-						closestDistance = distance;
-						closestPoint = point;
-					}
-				}
-				return closestPoint;
-			}
-			else
-			{
-				Node node = Sort(position);
-				return node.FindClosestPoint(position);
-			}
-		}
 	}
 
 	private Node rootNode;
@@ -137,7 +110,7 @@ public class Quadtree
 
 	public void AddPosition(Vector2 position)
 	{
-		rootNode.AddPosition(position);
+		rootNode.AddPoint(position);
 	}
 
 	public List<Rectangle> GetQuadrants()
@@ -145,10 +118,5 @@ public class Quadtree
 		List<Rectangle> quadrants = new();
 		rootNode.CollectQuadrants(quadrants);
 		return quadrants;
-	}
-
-	public Vector2? FindClosestPoint(Vector2 position)
-	{
-		return rootNode.FindClosestPoint(position);
 	}
 }

@@ -11,7 +11,6 @@ using SpatialPartitioning;
 internal class QuadtreeTest
 {
 	private List<Vector2> points = new();
-	private Dictionary<Vector2, Vector2> comparisons = new();
 	private Quadtree quadtree;
 
 	public QuadtreeTest(int windowSize, int pointCount, int comparisonCount)
@@ -29,16 +28,6 @@ internal class QuadtreeTest
 			points.Add(point);
 			quadtree.AddPosition(point);
 		}
-
-		// Generate random comparisons
-		for (int comparisonIndex = 0; comparisonIndex < comparisonCount; comparisonIndex++)
-		{
-			int x = random.Next(windowSize);
-			int y = random.Next(windowSize);
-			Vector2 comparisonOrigin = new(x, y);
-			Vector2 closestPoint = quadtree.FindClosestPoint(comparisonOrigin).Value;
-			comparisons[comparisonOrigin] = closestPoint;
-		}
 	}
 
 	public void Draw()
@@ -46,17 +35,14 @@ internal class QuadtreeTest
 		// Draw quadrants
 		List<Rectangle> quadrants = quadtree.GetQuadrants();
 		foreach (Rectangle quadrant in quadrants)
+		{
 			Raylib.DrawRectangleLinesEx(quadrant, 1, Color.Green);
+		}
 
 		// Draw points
 		foreach (Vector2 point in points)
-			Raylib.DrawCircleV(point, 2, Color.White);
-
-		// Draw comparisons
-		foreach (KeyValuePair<Vector2, Vector2> comparison in comparisons)
 		{
-			Raylib.DrawCircleV(comparison.Key, 2, Color.SkyBlue);
-			Raylib.DrawLineEx(comparison.Key, comparison.Value, 1, Color.Orange);
+			Raylib.DrawCircleV(point, 2, Color.White);
 		}
 	}
 }
