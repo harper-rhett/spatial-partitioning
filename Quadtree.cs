@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Numerics;
-using Raylib_cs;
+﻿using System.Numerics;
+using System.Drawing;
 
 namespace SpatialPartitioning;
 
@@ -26,7 +21,7 @@ public class Quadtree
 		private float right;
 		private float bottom;
 
-		private Rectangle Quadrant => new Rectangle(left, top, right - left, bottom - top);
+		private RectangleF Quadrant => new RectangleF(left, top, right - left, bottom - top);
 
 		public Node(float left, float top, float right, float bottom)
 		{
@@ -86,13 +81,13 @@ public class Quadtree
 				&& position.Y < bottom;
 		}
 
-		public void CollectQuadrants(List<Rectangle> quadrants)
+		public void CollectQuadrants(List<RectangleF> quadrants)
 		{
 			if (IsLeafNode) quadrants.Add(Quadrant);
 			else CollectChildQuadrants(quadrants);
 		}
 
-		private void CollectChildQuadrants(List<Rectangle> quadrants)
+		private void CollectChildQuadrants(List<RectangleF> quadrants)
 		{
 			northWest.CollectQuadrants(quadrants);
 			northEast.CollectQuadrants(quadrants);
@@ -113,9 +108,9 @@ public class Quadtree
 		rootNode.AddPoint(position);
 	}
 
-	public List<Rectangle> GetQuadrants()
+	public List<RectangleF> GetQuadrants()
 	{
-		List<Rectangle> quadrants = new();
+		List<RectangleF> quadrants = new();
 		rootNode.CollectQuadrants(quadrants);
 		return quadrants;
 	}

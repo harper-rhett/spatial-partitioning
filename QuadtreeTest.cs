@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Raylib_cs;
 using SpatialPartitioning;
+
+using Color = Raylib_cs.Color;
 
 internal class QuadtreeTest
 {
@@ -33,10 +36,10 @@ internal class QuadtreeTest
 	public void Draw()
 	{
 		// Draw quadrants
-		List<Rectangle> quadrants = quadtree.GetQuadrants();
-		foreach (Rectangle quadrant in quadrants)
+		List<RectangleF> quadrants = quadtree.GetQuadrants();
+		foreach (RectangleF quadrant in quadrants)
 		{
-			Raylib.DrawRectangleLinesEx(quadrant, 1, Color.Green);
+			Raylib.DrawRectangleLines((int)quadrant.X, (int)quadrant.Y, (int)quadrant.Width, (int)quadrant.Height, Color.Green);
 		}
 
 		// Draw points
