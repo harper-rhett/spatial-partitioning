@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace SpatialPartitioning;
 
-public class Quadtree
+internal class Quadtree
 {
 	private class Node
 	{
@@ -103,9 +103,9 @@ public class Quadtree
 		rootNode = new(0, 0, size, size);
 	}
 
-	public void AddPosition(Vector2 position)
+	public void AddPoint(Vector2 point)
 	{
-		rootNode.AddPoint(position);
+		rootNode.AddPoint(point);
 	}
 
 	public List<RectangleF> GetQuadrants()

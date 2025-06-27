@@ -29,7 +29,7 @@ internal class QuadtreeTest
 			int y = random.Next(windowSize);
 			Vector2 point = new(x, y);
 			points.Add(point);
-			quadtree.AddPosition(point);
+			quadtree.AddPoint(point);
 		}
 	}
 
