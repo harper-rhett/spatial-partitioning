@@ -6,18 +6,9 @@ using SpatialPartitioning;
 
 // Constants
 const int windowSize = 1200;
+const int points = 1000;
+const int comparisons = 50;
 
 // Initialize
-QuadtreeTest quadtreeTest = new(windowSize, 500, 50);
-
-// Game loop
-Raylib.InitWindow(windowSize, windowSize, "Quadtree Test");
-while (!Raylib.WindowShouldClose())
-{
-	Raylib.BeginDrawing();
-	Raylib.ClearBackground(Color.Black);
-	quadtreeTest.Draw();
-	Raylib.EndDrawing();
-}
-
-Raylib.CloseWindow();
+//QuadtreeTest quadtreeTest = new(windowSize, points);
+SpatialHashTest spatialHashTest = new(windowSize, 50, points, comparisons);

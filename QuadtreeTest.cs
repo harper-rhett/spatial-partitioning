@@ -16,7 +16,7 @@ internal class QuadtreeTest
 	private List<Vector2> points = new();
 	private Quadtree quadtree;
 
-	public QuadtreeTest(int windowSize, int pointCount, int comparisonCount)
+	public QuadtreeTest(int windowSize, int pointCount)
 	{
 		// Initialize
 		quadtree = new(windowSize);
@@ -31,10 +31,26 @@ internal class QuadtreeTest
 			points.Add(point);
 			quadtree.AddPoint(point);
 		}
+
+		// Generate window
+		Raylib.InitWindow(windowSize, windowSize, "Quadtree Test");
+
+		// Render to window
+		while (!Raylib.WindowShouldClose())
+		{
+			Raylib.BeginDrawing();
+			Draw();
+			Raylib.EndDrawing();
+		}
+
+		// Close window
+		Raylib.CloseWindow();
 	}
 
-	public void Draw()
+	private void Draw()
 	{
+		Raylib.ClearBackground(Color.Black);
+
 		// Draw quadrants
 		List<RectangleF> quadrants = quadtree.GetQuadrants();
 		foreach (RectangleF quadrant in quadrants)
