@@ -10,7 +10,7 @@ using Color = Raylib_cs.Color;
 
 namespace SpatialPartitioning;
 
-internal class SpatialHashTest
+internal class SpatialHash2DTest
 {
 	private List<Vector2> points = new();
 	private Dictionary<Vector2, Vector2> closestPoints = new();
@@ -18,7 +18,7 @@ internal class SpatialHashTest
 	private int windowSize;
 	private float hashSize;
 
-	public SpatialHashTest(int windowSize, float hashSize, int pointCount, int comparisonCount)
+	public SpatialHash2DTest(int windowSize, float hashSize, int pointCount, int comparisonCount)
 	{
 		// Initialize
 		this.windowSize = windowSize;
@@ -29,8 +29,8 @@ internal class SpatialHashTest
 		// Generate random points
 		for (int pointIndex = 0; pointIndex < pointCount; pointIndex++)
 		{
-			int x = random.Next(windowSize);
-			int y = random.Next(windowSize);
+			float x = (float)random.NextDouble() * windowSize;
+			float y = (float)random.NextDouble() * windowSize;
 			Vector2 point = new(x, y);
 			points.Add(point);
 			spatialHash.AddPoint(point);
@@ -39,15 +39,15 @@ internal class SpatialHashTest
 		// Generate random comparisons
 		for (int comparisonIndex = 1; comparisonIndex <= comparisonCount; comparisonIndex++)
 		{
-			int x = random.Next(windowSize);
-			int y = random.Next(windowSize);
+			float x = (float)random.NextDouble() * windowSize;
+			float y = (float)random.NextDouble() * windowSize;
 			Vector2 comparison = new(x, y);
 			Vector2? closestPoint = spatialHash.GetClosestPoint(comparison);
 			closestPoints[comparison] = closestPoint.Value;
 		}
 
 		// Generate window
-		Raylib.InitWindow(windowSize, windowSize, "Spatial Hash Test");
+		Raylib.InitWindow(windowSize, windowSize, "Spatial Hash 2D Test");
 
 		// Render to window
 		int gridSlices = (int)(hashSize / windowSize);
