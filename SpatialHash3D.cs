@@ -102,7 +102,7 @@ internal class SpatialHash3D
 					for (int z = pointCoordinate.Z - reach; z <= pointCoordinate.Z + reach; z++)
 					{
 						// Check if coordinate has already been searched
-						Coordinate searchCoordinate = new Coordinate { X = x, Y = y };
+						Coordinate searchCoordinate = new Coordinate { X = x, Y = y, Z = z };
 						if (visitedCoordinates.Contains(searchCoordinate)) continue;
 
 						// Check closest local point
