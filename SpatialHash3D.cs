@@ -7,65 +7,67 @@ using System.Threading.Tasks;
 
 namespace SpatialPartitioning;
 
-internal class SpatialHash
+internal class SpatialHash3D
 {
 	private struct Coordinate()
 	{
 		public int X;
 		public int Y;
+		public int Z;
 	}
 
-	private Dictionary<Coordinate, List<Vector2>> pointMap = new();
+	private Dictionary<Coordinate, List<Vector3>> pointMap = new();
 	private float hashSize;
 
-	public SpatialHash(float hashSize)
+	public SpatialHash3D(float hashSize)
 	{
 		this.hashSize = hashSize;
 	}
 
-	private Coordinate GetCoordinate(Vector2 point)
+	private Coordinate GetCoordinate(Vector3 point)
 	{
 		return new Coordinate
 		{
 			X = (int)MathF.Floor(point.X / hashSize),
-			Y = (int)MathF.Floor(point.Y / hashSize)
+			Y = (int)MathF.Floor(point.Y / hashSize),
+			Z = (int)MathF.Floor(point.Z / hashSize)
 		};
 	}
 
-	public void AddPoint(Vector2 point)
+	public void AddPoint(Vector3 point)
 	{
-		List<Vector2> points = GetPoints(GetCoordinate(point));
+		List<Vector3> points = GetPoints(GetCoordinate(point));
 		points.Add(point);
 	}
 
-	private List<Vector2> GetPoints(Coordinate coordinate)
+	private List<Vector3> GetPoints(Coordinate coordinate)
 	{
-		List<Vector2> points;
+		List<Vector3> points;
 		if (pointMap.ContainsKey(coordinate))
 		{
 			points = pointMap[coordinate];
 		}
 		else
 		{
-			points = new List<Vector2>();
+			points = new List<Vector3>();
 			pointMap[coordinate] = points;
 		}
 		return points;
 	}
 
-	private Vector2? GetClosestLocalPoint(Coordinate coordinate, Vector2 point, out float closestDistance)
+	private Vector3? GetClosestLocalPoint(Coordinate coordinate, Vector3 point, out float closestDistance)
 	{
 		// Get local space
-		List<Vector2> points = GetPoints(coordinate);
+		List<Vector3> points = GetPoints(coordinate);
 
 		// Initialize search
 		closestDistance = float.MaxValue;
-		Vector2? closestPoint = null;
-		
+		Vector3? closestPoint = null;
+
 		// Find closest local point
-		foreach (Vector2 localPoint in points)
+		foreach (Vector3 localPoint in points)
 		{
-			float distance = Vector2.Distance(point, localPoint);
+			float distance = Vector3.Distance(point, localPoint);
 			if (distance < closestDistance)
 			{
 				closestDistance = distance;
@@ -77,7 +79,7 @@ internal class SpatialHash
 		return closestPoint;
 	}
 
-	public Vector2? GetClosestPoint(Vector2 point)
+	public Vector3? GetClosestPoint(Vector3 point)
 	{
 		// Set up coordinates
 		Coordinate pointCoordinate = GetCoordinate(point);
@@ -86,7 +88,7 @@ internal class SpatialHash
 		// Initialize search
 		float closestDistance = float.MaxValue;
 		float closestCoordinateDistance = float.MaxValue;
-		Vector2? closestPoint = null;
+		Vector3? closestPoint = null;
 
 		// Search for closest point
 		int reach = 0;
@@ -97,23 +99,24 @@ internal class SpatialHash
 			// Loop coordinates in a square
 			for (int x = pointCoordinate.X - reach; x <= pointCoordinate.X + reach; x++)
 				for (int y = pointCoordinate.Y - reach; y <= pointCoordinate.Y + reach; y++)
-				{
-					// Check if coordinate has already been searched
-					Coordinate searchCoordinate = new Coordinate { X = x, Y = y };
-					if (visitedCoordinates.Contains(searchCoordinate)) continue;
-
-					// Check closest local point
-					Vector2? closestLocalPoint = GetClosestLocalPoint(searchCoordinate, point, out float closestLocalDistance);
-					if (closestLocalDistance < closestDistance)
+					for (int z = pointCoordinate.Z - reach; z <= pointCoordinate.Z + reach; z++)
 					{
-						closestDistance = closestLocalDistance;
-						closestCoordinateDistance = closestDistance / hashSize;
-						closestPoint = closestLocalPoint.Value;
+						// Check if coordinate has already been searched
+						Coordinate searchCoordinate = new Coordinate { X = x, Y = y };
+						if (visitedCoordinates.Contains(searchCoordinate)) continue;
+
+						// Check closest local point
+						Vector3? closestLocalPoint = GetClosestLocalPoint(searchCoordinate, point, out float closestLocalDistance);
+						if (closestLocalDistance < closestDistance)
+						{
+							closestDistance = closestLocalDistance;
+							closestCoordinateDistance = closestDistance / hashSize;
+							closestPoint = closestLocalPoint.Value;
+						}
+
+						// Mark the coordinate as visited
+						visitedCoordinates.Add(searchCoordinate);
 					}
-				
-					// Mark the coordinate as visited
-					visitedCoordinates.Add(searchCoordinate);
-				}
 
 			// Expand our reach
 			reach++;

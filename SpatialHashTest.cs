@@ -14,7 +14,7 @@ internal class SpatialHashTest
 {
 	private List<Vector2> points = new();
 	private Dictionary<Vector2, Vector2> closestPoints = new();
-	private SpatialHash spatialHash;
+	private SpatialHash2D spatialHash;
 	private int windowSize;
 	private float hashSize;
 
