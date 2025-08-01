@@ -18,14 +18,16 @@ internal class SpatialHash3DTest
 	private float hashSize;
 	private float spaceSize;
 	private Camera3D camera;
-	private Vector3 cameraPosition;
+	private Vector3 cameraDirection = Vector3.One;
+
+	private const float movementSpeed = 45;
 
 	public SpatialHash3DTest(int windowSize, float spaceSize, float hashSize, int pointCount, int comparisonCount)
 	{
 		// Initialize
 		this.hashSize = hashSize;
 		this.spaceSize = spaceSize;
-		camera = new(-Vector3.One * spaceSize, Vector3.One, Vector3.UnitY, 45, CameraProjection.Perspective);
+		camera = new(-Vector3.One * spaceSize, Vector3.Zero, Vector3.UnitY, 45, CameraProjection.Perspective);
 		GenerateData(pointCount, comparisonCount);
 
 		// Generate window
@@ -35,6 +37,7 @@ internal class SpatialHash3DTest
 		int gridSlices = (int)(hashSize / spaceSize);
 		while (!Raylib.WindowShouldClose())
 		{
+			Input();
 			Draw();
 		}
 
@@ -69,6 +72,37 @@ internal class SpatialHash3DTest
 			Vector3? closestPoint = spatialHash.GetClosestPoint(comparison);
 			closestPoints[comparison] = closestPoint.Value;
 		}
+	}
+
+	private void Input()
+	{
+		float deltaTime = Raylib.GetFrameTime();
+		if (Raylib.IsKeyDown(KeyboardKey.W))
+		{
+			camera.Position += cameraDirection * movementSpeed * deltaTime;
+		}
+		if (Raylib.IsKeyDown(KeyboardKey.S))
+		{
+			camera.Position += -cameraDirection * movementSpeed * deltaTime;
+		}
+		if (Raylib.IsKeyDown(KeyboardKey.A))
+		{
+			camera.Position += Vector3.Cross(cameraDirection, -camera.Up) * movementSpeed * deltaTime;
+		}
+		if (Raylib.IsKeyDown(KeyboardKey.D))
+		{
+			camera.Position += Vector3.Cross(cameraDirection, camera.Up) * movementSpeed * deltaTime;
+		}
+		if (Raylib.IsKeyDown(KeyboardKey.Space))
+		{
+			camera.Position += camera.Up * movementSpeed * deltaTime;
+		}
+		if (Raylib.IsKeyDown(KeyboardKey.LeftControl))
+		{
+			camera.Position += -camera.Up * movementSpeed * deltaTime;
+		}
+
+		camera.Target = camera.Position + cameraDirection;
 	}
 
 	private void Draw()
