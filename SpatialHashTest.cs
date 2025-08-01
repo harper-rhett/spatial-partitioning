@@ -13,6 +13,7 @@ namespace SpatialPartitioning;
 internal class SpatialHashTest
 {
 	private List<Vector2> points = new();
+	private Dictionary<Vector2, Vector2> closestPoints = new();
 	private SpatialHash spatialHash;
 	private int windowSize;
 	private float hashSize;
@@ -36,9 +37,13 @@ internal class SpatialHashTest
 		}
 
 		// Generate random comparisons
-		for (int comparison = 1; comparison <= comparisonCount; comparison++)
+		for (int comparisonIndex = 1; comparisonIndex <= comparisonCount; comparisonIndex++)
 		{
-			int point = random.Next(points.Count);
+			int x = random.Next(windowSize);
+			int y = random.Next(windowSize);
+			Vector2 comparison = new(x, y);
+			Vector2? closestPoint = spatialHash.GetClosestPoint(comparison);
+			closestPoints[comparison] = closestPoint.Value;
 		}
 
 		// Generate window
@@ -68,10 +73,18 @@ internal class SpatialHashTest
 				Raylib.DrawRectangleLines((int)x, (int)y, (int)hashSize, (int)hashSize, Color.Green);
 			}
 
+		// Draw comparisons
+		foreach (Vector2 comparison in closestPoints.Keys)
+		{
+			Vector2 closetPoint = closestPoints[comparison];
+			Raylib.DrawLineV(comparison, closetPoint, Color.Blue);
+			Raylib.DrawCircleV(comparison, 3, Color.Blue);
+		}
+
 		// Draw points
 		foreach (Vector2 point in points)
 		{
-			Raylib.DrawCircleV(point, 2, Color.White);
+			Raylib.DrawCircleV(point, 3, Color.White);
 		}
 	}
 }

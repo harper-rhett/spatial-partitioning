@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using SpatialPartitioning;
 
 // Constants
-const int windowSize = 1200;
-const int points = 1000;
+const int windowSize = 800;
+const int points = 10;
 const int comparisons = 50;
+const float hashSize = 200;
 
 // Initialize
 //QuadtreeTest quadtreeTest = new(windowSize, points);
-SpatialHashTest spatialHashTest = new(windowSize, 50, points, comparisons);
+SpatialHashTest spatialHashTest = new(windowSize, hashSize, points, comparisons);
