@@ -92,7 +92,7 @@ internal class SpatialHash
 		int reach = 0;
 
 		// We must search until the closest point found is the closest possible point searched
-		while (reach < closestCoordinateDistance)
+		while (reach + 1 < closestCoordinateDistance)
 		{
 			// Loop coordinates in a square
 			for (int x = pointCoordinate.X - reach; x <= pointCoordinate.X + reach; x++)
