@@ -18,6 +18,7 @@ internal class SpatialHash3DTest
 	private float hashSize;
 	private float spaceSize;
 	private Camera3D camera;
+	private Vector3 cameraPosition;
 
 	public SpatialHash3DTest(int windowSize, float spaceSize, float hashSize, int pointCount, int comparisonCount)
 	{
