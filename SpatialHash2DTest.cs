@@ -42,7 +42,7 @@ internal class SpatialHash2DTest
 			float x = (float)random.NextDouble() * windowSize;
 			float y = (float)random.NextDouble() * windowSize;
 			Vector2 comparison = new(x, y);
-			Vector2? closestPoint = spatialHash.GetClosestPoint(comparison);
+			Vector2? closestPoint = spatialHash.GetClosestPoint(comparison, out float closestDistance);
 			closestPoints[comparison] = closestPoint.Value;
 		}
 

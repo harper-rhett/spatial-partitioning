@@ -69,7 +69,7 @@ internal class SpatialHash3DTest
 			float y = (float)random.NextDouble() * spaceSize;
 			float z = (float)random.NextDouble() * spaceSize;
 			Vector3 comparison = new(x, y, z);
-			Vector3? closestPoint = spatialHash.GetClosestPoint(comparison);
+			Vector3? closestPoint = spatialHash.GetClosestPoint(comparison, out float closestDistance);
 			closestPoints[comparison] = closestPoint.Value;
 		}
 	}

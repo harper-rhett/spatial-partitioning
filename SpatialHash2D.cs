@@ -17,6 +17,7 @@ internal class SpatialHash2D
 
 	private Dictionary<Coordinate, List<Vector2>> pointMap = new();
 	private float hashSize;
+	private bool pointAdded;
 
 	public SpatialHash2D(float hashSize)
 	{
@@ -36,6 +37,7 @@ internal class SpatialHash2D
 	{
 		List<Vector2> points = GetPoints(GetCoordinate(point));
 		points.Add(point);
+		pointAdded = true;
 	}
 
 	private List<Vector2> GetPoints(Coordinate coordinate)
@@ -77,16 +79,17 @@ internal class SpatialHash2D
 		return closestPoint;
 	}
 
-	public Vector2? GetClosestPoint(Vector2 point)
+	public Vector2? GetClosestPoint(Vector2 point, out float closestDistance)
 	{
+		// Initialize search
+		closestDistance = float.MaxValue;
+		if (!pointAdded) return null;
+		float closestCoordinateDistance = float.MaxValue;
+		Vector2? closestPoint = null;
+
 		// Set up coordinates
 		Coordinate pointCoordinate = GetCoordinate(point);
 		HashSet<Coordinate> visitedCoordinates = new();
-
-		// Initialize search
-		float closestDistance = float.MaxValue;
-		float closestCoordinateDistance = float.MaxValue;
-		Vector2? closestPoint = null;
 
 		// Search for closest point
 		int reach = 0;
