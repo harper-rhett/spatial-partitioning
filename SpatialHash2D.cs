@@ -9,7 +9,7 @@ namespace SpatialPartitioning;
 
 internal class SpatialHash2D
 {
-	private struct Coordinate()
+	private struct Coordinate
 	{
 		public int X;
 		public int Y;
