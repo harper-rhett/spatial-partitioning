@@ -5,8 +5,8 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-
-using Color = Raylib_cs.Color;
+using static Raylib_cs.Raylib;
+using static Raylib_cs.Color;
 
 namespace SpatialPartitioning;
 
@@ -47,44 +47,44 @@ internal class SpatialHash2DTest
 		}
 
 		// Generate window
-		Raylib.InitWindow(windowSize, windowSize, "Spatial Hash 2D Test");
+		InitWindow(windowSize, windowSize, "Spatial Hash 2D Test");
 
 		// Render to window
 		int gridSlices = (int)(hashSize / windowSize);
-		while (!Raylib.WindowShouldClose())
+		while (!WindowShouldClose())
 		{
-			Raylib.BeginDrawing();
+			BeginDrawing();
 			Draw();
-			Raylib.EndDrawing();
+			EndDrawing();
 		}
 
 		// Close window
-		Raylib.CloseWindow();
+		CloseWindow();
 	}
 
 	private void Draw()
 	{
-		Raylib.ClearBackground(Color.Black);
+		ClearBackground(Black);
 
 		// Draw grid
 		for (float x = 0; x < windowSize; x += hashSize)
 			for (float y = 0; y < windowSize; y += hashSize)
 			{
-				Raylib.DrawRectangleLines((int)x, (int)y, (int)hashSize, (int)hashSize, Color.Green);
+				DrawRectangleLines((int)x, (int)y, (int)hashSize, (int)hashSize, Green);
 			}
 
 		// Draw comparisons
 		foreach (Vector2 comparison in closestPoints.Keys)
 		{
 			Vector2 closetPoint = closestPoints[comparison];
-			Raylib.DrawLineV(comparison, closetPoint, Color.Blue);
-			Raylib.DrawCircleV(comparison, 3, Color.Blue);
+			DrawLineV(comparison, closetPoint, Blue);
+			DrawCircleV(comparison, 3, Blue);
 		}
 
 		// Draw points
 		foreach (Vector2 point in points)
 		{
-			Raylib.DrawCircleV(point, 3, Color.White);
+			DrawCircleV(point, 3, White);
 		}
 	}
 }

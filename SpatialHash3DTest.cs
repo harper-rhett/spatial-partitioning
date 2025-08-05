@@ -1,12 +1,7 @@
 ﻿using Raylib_cs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-
-using Color = Raylib_cs.Color;
+using static Raylib_cs.Raylib;
+using static Raylib_cs.Color;
 
 namespace SpatialPartitioning;
 
@@ -31,18 +26,18 @@ internal class SpatialHash3DTest
 		GenerateData(pointCount, comparisonCount);
 
 		// Generate window
-		Raylib.InitWindow(windowSize, windowSize, "Spatial Hash 3D Test");
+		InitWindow(windowSize, windowSize, "Spatial Hash 3D Test");
 
 		// Render to window
 		int gridSlices = (int)(hashSize / spaceSize);
-		while (!Raylib.WindowShouldClose())
+		while (!WindowShouldClose())
 		{
 			Input();
 			Draw();
 		}
 
 		// Close window
-		Raylib.CloseWindow();
+		CloseWindow();
 	}
 
 	private void GenerateData(int pointCount, int comparisonCount)
@@ -76,28 +71,28 @@ internal class SpatialHash3DTest
 
 	private void Input()
 	{
-		float deltaTime = Raylib.GetFrameTime();
-		if (Raylib.IsKeyDown(KeyboardKey.W))
+		float deltaTime = GetFrameTime();
+		if (IsKeyDown(KeyboardKey.W))
 		{
 			camera.Position += cameraDirection * movementSpeed * deltaTime;
 		}
-		if (Raylib.IsKeyDown(KeyboardKey.S))
+		if (IsKeyDown(KeyboardKey.S))
 		{
 			camera.Position += -cameraDirection * movementSpeed * deltaTime;
 		}
-		if (Raylib.IsKeyDown(KeyboardKey.A))
+		if (IsKeyDown(KeyboardKey.A))
 		{
 			camera.Position += Vector3.Cross(cameraDirection, -camera.Up) * movementSpeed * deltaTime;
 		}
-		if (Raylib.IsKeyDown(KeyboardKey.D))
+		if (IsKeyDown(KeyboardKey.D))
 		{
 			camera.Position += Vector3.Cross(cameraDirection, camera.Up) * movementSpeed * deltaTime;
 		}
-		if (Raylib.IsKeyDown(KeyboardKey.Space))
+		if (IsKeyDown(KeyboardKey.Space))
 		{
 			camera.Position += camera.Up * movementSpeed * deltaTime;
 		}
-		if (Raylib.IsKeyDown(KeyboardKey.LeftControl))
+		if (IsKeyDown(KeyboardKey.LeftControl))
 		{
 			camera.Position += -camera.Up * movementSpeed * deltaTime;
 		}
@@ -107,33 +102,33 @@ internal class SpatialHash3DTest
 
 	private void Draw()
 	{
-		Raylib.BeginDrawing();
-		Raylib.ClearBackground(Color.Black);
-		Raylib.BeginMode3D(camera);
+		BeginDrawing();
+		ClearBackground(Black);
+		BeginMode3D(camera);
 
 		// Draw grid
 		for (float x = 0; x < spaceSize; x += hashSize)
 			for (float y = 0; y < spaceSize; y += hashSize)
 				for (float z = 0; z < spaceSize; z += hashSize)
 				{
-					Raylib.DrawCubeWires(new Vector3(x, y, z), hashSize, hashSize, hashSize, Color.Green);
+					DrawCubeWires(new Vector3(x, y, z), hashSize, hashSize, hashSize, Green);
 				}
 
 		// Draw comparisons
 		foreach (Vector3 comparison in closestPoints.Keys)
 		{
 			Vector3 closetPoint = closestPoints[comparison];
-			Raylib.DrawLine3D(comparison, closetPoint, Color.Blue);
-			Raylib.DrawSphere(comparison, 1, Color.Blue);
+			DrawLine3D(comparison, closetPoint, Blue);
+			DrawSphere(comparison, 1, Blue);
 		}
 
 		// Draw points
 		foreach (Vector3 point in points)
 		{
-			Raylib.DrawSphere(point, 1, Color.White);
+			DrawSphere(point, 1, White);
 		}
 
-		Raylib.EndMode3D();
-		Raylib.EndDrawing();
+		EndMode3D();
+		EndDrawing();
 	}
 }
